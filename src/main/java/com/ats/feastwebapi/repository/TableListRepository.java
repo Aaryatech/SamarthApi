@@ -11,11 +11,11 @@ import com.ats.feastwebapi.model.TableList;
 public interface TableListRepository extends JpaRepository<TableList, Integer>{
 
 	@Query(value = "SELECT * FROM m_table AS a WHERE NOT EXISTS ( SELECT * FROM t_order AS b  WHERE a.table_no=b.table_no AND b.bill_status=1 and b.del_status=1 ) "
-			+ "and a.is_delete=1 ORDER BY a.is_active,a.table_no", nativeQuery = true)
+			+ "and a.is_delete=1 ORDER BY a.is_active desc,a.table_no", nativeQuery = true)
 	List<TableList> getFreeTableList();
 
 	@Query(value = "SELECT * FROM m_table AS a WHERE EXISTS ( SELECT * FROM t_order AS b  WHERE a.table_no=b.table_no AND b.bill_status=1 and b.del_status=1 ) "
-			+ "and a.is_delete=1 ", nativeQuery = true)
+			+ "and a.is_delete=1 ORDER BY a.is_active desc,a.table_no ", nativeQuery = true)
 	List<TableList> getBsyTableList();
 
 	@Query(value = "select coalesce(sum(od.quantity*od.rate),0) as total from t_order_details od, t_order o where o.order_id = od.order_id "
@@ -26,11 +26,11 @@ public interface TableListRepository extends JpaRepository<TableList, Integer>{
 	int getLastOrder(@Param("tableNo")int tableNo);
 
 	@Query(value = "SELECT * FROM m_table AS a  WHERE NOT EXISTS ( SELECT *  FROM t_order AS b  WHERE a.table_no=b.table_no  "
-			+ "AND b.bill_status=1  and b.del_status=1  ) and a.is_delete=1 and a.is_active=:catId", nativeQuery = true)
+			+ "AND b.bill_status=1  and b.del_status=1  ) and a.is_delete=1 and a.is_active=:catId ORDER BY a.is_active desc,a.table_no", nativeQuery = true)
 	List<TableList> getFreeTableListByVenueId(@Param("catId") int catId);
 
 	@Query(value = "SELECT * FROM m_table AS a  WHERE EXISTS ( SELECT *  FROM t_order AS b  WHERE a.table_no=b.table_no  "
-			+ "AND b.bill_status=1  and b.del_status=1  ) and a.is_delete=1 and a.is_active=:catId", nativeQuery = true)
+			+ "AND b.bill_status=1  and b.del_status=1  ) and a.is_delete=1 and a.is_active=:catId ORDER BY a.is_active desc,a.table_no", nativeQuery = true)
 	List<TableList> getBsyTableListByVenueId(@Param("catId")int catId);
 
 }
