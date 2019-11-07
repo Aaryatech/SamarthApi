@@ -94,7 +94,6 @@ public class TableList {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
-	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getUpdatedDate() {
 		return updatedDate;
 	}

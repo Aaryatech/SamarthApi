@@ -54,8 +54,6 @@ public class TableBean {
 	public int getUserId() {
 		return userId;
 	}
-	
-	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getUpdatedDate() {
 		return updatedDate;
 	}
