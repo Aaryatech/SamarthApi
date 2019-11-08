@@ -990,5 +990,23 @@ public class MasterController {
 		return itemList;
 
 	}
+	
+	/* Sachin 2019-11-08*/
+	@RequestMapping(value = { "/getItemByCode" }, method = RequestMethod.POST)
+	public @ResponseBody Item getItemByCode(@RequestParam("itemCode") String itemCode,@RequestParam("delStatus") int delStatus) {
+
+		Item item = null;
+		
+		try {
+			item = itemRepository.findByitemDescAndDelStatus(itemCode, delStatus);
+
+		} catch (Exception e) {
+			item=new Item();
+			e.printStackTrace();
+
+		}
+		return item;
+
+	}
 
 }

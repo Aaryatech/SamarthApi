@@ -30,5 +30,8 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 			+ "m_item.cat_id=m_catgory.cat_id AND m_catgory.del_status=1 order BY\r\n"
 			+ "m_item.cat_id", nativeQuery = true)
 	List<Item> findAllItem();
+	
+	Item findByitemDescAndDelStatus(String itemCode,int delStatus);
+	
 
 }

@@ -1,6 +1,10 @@
 package com.ats.feastwebapi.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ats.feastwebapi.model.ErrorMessage;
 import com.ats.feastwebapi.model.Order;
 import com.ats.feastwebapi.model.OrderDetails;
+import com.ats.feastwebapi.model.OrderDetailsList;
 import com.ats.feastwebapi.model.OrderList;
 import com.ats.feastwebapi.repository.OrderDetailRepository;
 import com.ats.feastwebapi.repository.OrderListRepository;
@@ -81,6 +86,8 @@ public class OrderController {
 
 	}
 
+	
+	
 	@RequestMapping(value = { "/getOrdeByOrderId" }, method = RequestMethod.POST)
 	public @ResponseBody Order getOrdeByOrderId(@RequestParam("orderId") int orderId) {
 
@@ -202,4 +209,63 @@ public class OrderController {
 		return errorMessage;
 	}
 
+	/*Sachin 2019-08-11 Not used*/
+	@RequestMapping(value = { "/saveOrderWebApp" }, method = RequestMethod.POST)
+	public @ResponseBody Order saveOrderWebApp(@RequestBody List<OrderDetailsList> orderDetList) {
+
+		Order orderRes = new Order();
+		try {
+			
+			orderRes.setBillStatus(1);
+			String curDate;
+
+				SimpleDateFormat hmsDf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+				Calendar cal = Calendar.getInstance();
+
+			String curDtTime= hmsDf.format(cal.getTime());
+
+			DateFormat df=new SimpleDateFormat("yyyy-MM-dd");
+			curDate =df.format(new Date());
+			orderRes.setDelStatus(1);
+			orderRes.setOrderDate(curDate);
+			orderRes.setOrderDateTime(curDtTime);
+			
+			orderRes.setOrderId(0);
+			
+			orderRes.setTableNo(1);
+			orderRes.setUserId(1);
+			
+			List<OrderDetails> orderDetailList = new ArrayList<>();
+
+			orderRes = orderRepository.saveAndFlush(orderRes);
+
+			for (int i = 0; i < orderDetList.size(); i++) {
+
+				orderRes.getOrderDetailList().get(i).setOrderId(orderRes.getOrderId());
+				
+				OrderDetails od=new OrderDetails();
+				
+				od.setIsMixer(0);
+				od.setItemId(orderDetList.get(i).getItemId());
+				od.setOrderDetailsId(0);
+				od.setOrderId(orderRes.getOrderId());
+				od.setQuantity(orderDetList.get(i).getQuantity());
+				od.setRate(orderDetList.get(i).getRate());
+				od.setRemark(orderDetList.get(i).getRemark());
+				od.setStatus(1);
+				orderDetailList.add(od);
+
+			}
+			orderDetailList = orderDetailRepository.saveAll(orderDetailList);
+			
+			orderRes.setOrderDetailList(orderDetailList);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return orderRes;
+
+	}
 }
