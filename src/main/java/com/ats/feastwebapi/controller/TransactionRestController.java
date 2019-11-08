@@ -210,24 +210,6 @@ public class TransactionRestController {
 
 	}
 	
-	@RequestMapping(value = { "/userLoginProcess" }, method = RequestMethod.POST)
-	public @ResponseBody Admin userLoginProcess(@RequestParam("userName") String userName, 
-			@RequestParam("pass") String pass) {
-		Admin admin = new Admin();
-	
-		try {
-			 admin = adminRepository.findByUsernameAndPasswordAndDelStatus(userName,pass,1);
-			 System.err.println("User---------"+admin);	
-			 
-		} catch (Exception e) {
-			e.printStackTrace();
-
-		}
-		return admin;
-
-	}
-
-	
 	@RequestMapping(value = { "/orderListByTableNo" }, method = RequestMethod.POST)
 	public @ResponseBody List<OrderHeaderList> orderListByTableNo(@RequestParam("tableNo") int tableNo) {
 
