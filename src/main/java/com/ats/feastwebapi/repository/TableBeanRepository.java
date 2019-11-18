@@ -20,5 +20,6 @@ public interface TableBeanRepository extends JpaRepository<TableBean, Integer> {
 	List<TableBean> findAllByIsDelete(int i);
 
 	TableBean findByTableId(int tableId);
+	TableBean findByTableNo(int tableNo);
 
 }

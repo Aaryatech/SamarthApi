@@ -444,6 +444,23 @@ public class MasterController {
 
 	}
 
+	@RequestMapping(value = { "/getTableByTableNo" }, method = RequestMethod.POST)
+	public @ResponseBody TableBean getTableByTableNo(@RequestParam("tableNo") int tableNo) {
+
+		TableBean tableBean = null;
+		try {
+			tableBean = tableBeanRepository.findByTableNo(tableNo);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return tableBean;
+
+	}
+
+	
 	@RequestMapping(value = { "/getAllTablesByIsUsed" }, method = RequestMethod.GET)
 	public @ResponseBody List<TableBean> getAllTablesByIsUsed() {
 
