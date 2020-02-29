@@ -268,4 +268,37 @@ public class OrderController {
 		return orderRes;
 
 	}
+	
+	//Sachin 29-02-2020
+	
+	
+	
+	
+	@RequestMapping(value = { "/changeTableNoInOrder" }, method = RequestMethod.POST)
+	public @ResponseBody ErrorMessage updateTableNoInOrder(@RequestParam("tableNo") int tableNo,
+			@RequestParam("orderId") int orderId) {
+
+		ErrorMessage errorMessage = new ErrorMessage();
+
+		try {
+			int result = orderRepository.updateTableNoInOrder(tableNo, orderId);
+
+			if (result>0) {
+				errorMessage.setError(false);
+				errorMessage.setMessage(" Changed Successfully");
+			} else {
+				errorMessage.setError(true);
+				errorMessage.setMessage("Change Failed");
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			errorMessage.setError(true);
+			errorMessage.setMessage("Change Failed :EXC");
+
+		}
+		return errorMessage;
+	}
+
 }
