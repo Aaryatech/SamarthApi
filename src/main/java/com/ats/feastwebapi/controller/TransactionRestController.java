@@ -28,6 +28,7 @@ import com.ats.feastwebapi.model.OrderHeaderList;
 import com.ats.feastwebapi.model.ParcelOrder;
 import com.ats.feastwebapi.model.ParcelOrderDetails;
 import com.ats.feastwebapi.model.TableList;
+import com.ats.feastwebapi.model.TableListNew;
 import com.ats.feastwebapi.model.TableSetting;
 import com.ats.feastwebapi.model.TaxableDataForBill;
 import com.ats.feastwebapi.repository.AdminRepository;
@@ -43,6 +44,7 @@ import com.ats.feastwebapi.repository.OrderHeaderListRepository;
 import com.ats.feastwebapi.repository.OrderRepository;
 import com.ats.feastwebapi.repository.ParcelOrderDetailsRepository;
 import com.ats.feastwebapi.repository.ParcelOrderRepository;
+import com.ats.feastwebapi.repository.TableListNewRepo;
 import com.ats.feastwebapi.repository.TableListRepository;
 import com.ats.feastwebapi.repository.TableSettingRepository;
 import com.ats.feastwebapi.repository.TaxableDataForBillRepo;
@@ -97,6 +99,9 @@ public class TransactionRestController {
 
 	@Autowired
 	TaxableDataForBillRepo taxableDataForBillRepo;
+	
+	@Autowired
+	TableListNewRepo tableListNewRepo;
 
 	@RequestMapping(value = { "/getFreeTableList" }, method = RequestMethod.GET)
 	public @ResponseBody List<TableList> getFreeTableList() {
@@ -132,20 +137,37 @@ public class TransactionRestController {
 
 	}
 
+//	@RequestMapping(value = { "/getBsyTableList" }, method = RequestMethod.GET)
+//	public @ResponseBody List<TableList> getBsyTableList() {
+//
+//		List<TableList> tableLists = new ArrayList<TableList>();
+//		try {
+//
+//			tableLists = tableListRepository.getBsyTableList();
+//
+//			for (int i = 0; i < tableLists.size(); i++) {
+//				float totalAmt = tableListRepository.getTotalAmtOfTable(tableLists.get(i).getTableNo());
+//				int LastKOT = tableListRepository.getLastOrder(tableLists.get(i).getTableNo());
+//				tableLists.get(i).setTotalAmt(totalAmt);
+//				tableLists.get(i).setOrderId(LastKOT);
+//			}
+//
+//		} catch (Exception e) {
+//
+//			e.printStackTrace();
+//
+//		}
+//		return tableLists;
+//
+//	}
+	
 	@RequestMapping(value = { "/getBsyTableList" }, method = RequestMethod.GET)
-	public @ResponseBody List<TableList> getBsyTableList() {
+	public @ResponseBody List<TableListNew> getBsyTableList() {
 
-		List<TableList> tableLists = new ArrayList<TableList>();
+		List<TableListNew> tableLists = new ArrayList<TableListNew>();
 		try {
 
-			tableLists = tableListRepository.getBsyTableList();
-
-			for (int i = 0; i < tableLists.size(); i++) {
-				float totalAmt = tableListRepository.getTotalAmtOfTable(tableLists.get(i).getTableNo());
-				int LastKOT = tableListRepository.getLastOrder(tableLists.get(i).getTableNo());
-				tableLists.get(i).setTotalAmt(totalAmt);
-				tableLists.get(i).setOrderId(LastKOT);
-			}
+			tableLists = tableListNewRepo.getBsyTableList();
 
 		} catch (Exception e) {
 
@@ -156,20 +178,38 @@ public class TransactionRestController {
 
 	}
 
+//	@RequestMapping(value = { "/getBsyTableListByCatId" }, method = RequestMethod.POST)
+//	public @ResponseBody List<TableList> getBsyTableListByVenueId(@RequestParam("catId") int catId) {
+//
+//		List<TableList> tableLists = new ArrayList<TableList>();
+//		try {
+//
+//			tableLists = tableListRepository.getBsyTableListByVenueId(catId);
+//
+//			for (int i = 0; i < tableLists.size(); i++) {
+//				float totalAmt = tableListRepository.getTotalAmtOfTable(tableLists.get(i).getTableNo());
+//				int LastKOT = tableListRepository.getLastOrder(tableLists.get(i).getTableNo());
+//				tableLists.get(i).setTotalAmt(totalAmt);
+//				tableLists.get(i).setOrderId(LastKOT);
+//			}
+//
+//		} catch (Exception e) {
+//
+//			e.printStackTrace();
+//
+//		}
+//		return tableLists;
+//
+//	}
+
+	
 	@RequestMapping(value = { "/getBsyTableListByCatId" }, method = RequestMethod.POST)
-	public @ResponseBody List<TableList> getBsyTableListByVenueId(@RequestParam("catId") int catId) {
+	public @ResponseBody List<TableListNew> getBsyTableListByVenueId(@RequestParam("catId") int catId) {
 
-		List<TableList> tableLists = new ArrayList<TableList>();
+		List<TableListNew> tableLists = new ArrayList<TableListNew>();
 		try {
 
-			tableLists = tableListRepository.getBsyTableListByVenueId(catId);
-
-			for (int i = 0; i < tableLists.size(); i++) {
-				float totalAmt = tableListRepository.getTotalAmtOfTable(tableLists.get(i).getTableNo());
-				int LastKOT = tableListRepository.getLastOrder(tableLists.get(i).getTableNo());
-				tableLists.get(i).setTotalAmt(totalAmt);
-				tableLists.get(i).setOrderId(LastKOT);
-			}
+			tableLists = tableListNewRepo.getBsyTableListByVenueId(catId);
 
 		} catch (Exception e) {
 
@@ -180,6 +220,8 @@ public class TransactionRestController {
 
 	}
 
+	
+	
 	@RequestMapping(value = { "/adminLogin" }, method = RequestMethod.POST)
 	public @ResponseBody LoginProcess adminLogin(@RequestParam("userName") String userName,
 			@RequestParam("pass") String pass) {
@@ -209,6 +251,29 @@ public class TransactionRestController {
 
 	}
 
+//	@RequestMapping(value = { "/orderListByTableNo" }, method = RequestMethod.POST)
+//	public @ResponseBody List<OrderHeaderList> orderListByTableNo(@RequestParam("tableNo") int tableNo) {
+//
+//		List<OrderHeaderList> orders = new ArrayList<OrderHeaderList>();
+//		try {
+//
+//			orders = orderHeaderListRepository.orderListByTableNo(tableNo);
+//
+//			for (int i = 0; i < orders.size(); i++) {
+//				List<OrderDetailsList> orderDetails = orderDetailsListRepository
+//						.findByOrderId(orders.get(i).getOrderId());
+//				orders.get(i).setOrderDetailsList(orderDetails);
+//			}
+//
+//		} catch (Exception e) {
+//
+//			e.printStackTrace();
+//
+//		}
+//		return orders;
+//	}
+
+	
 	@RequestMapping(value = { "/orderListByTableNo" }, method = RequestMethod.POST)
 	public @ResponseBody List<OrderHeaderList> orderListByTableNo(@RequestParam("tableNo") int tableNo) {
 
@@ -216,11 +281,24 @@ public class TransactionRestController {
 		try {
 
 			orders = orderHeaderListRepository.orderListByTableNo(tableNo);
+			
+			List<OrderDetailsList> orderDetails = orderDetailsListRepository.findAllByTable(tableNo);
 
 			for (int i = 0; i < orders.size(); i++) {
-				List<OrderDetailsList> orderDetails = orderDetailsListRepository
-						.findByOrderId(orders.get(i).getOrderId());
-				orders.get(i).setOrderDetailsList(orderDetails);
+				
+				List<OrderDetailsList> temp=new ArrayList<>();
+				
+				for (int j = 0; j < orderDetails.size(); j++) {
+				
+					if(orders.get(i).getOrderId()==orderDetails.get(j).getOrderId()) {
+						temp.add(orderDetails.get(j));
+					}
+					
+				}				
+				
+				//List<OrderDetailsList> orderDetails = orderDetailsListRepository
+				//		.findByOrderId(orders.get(i).getOrderId());
+				orders.get(i).setOrderDetailsList(temp);
 			}
 
 		} catch (Exception e) {
@@ -231,6 +309,8 @@ public class TransactionRestController {
 		return orders;
 	}
 
+	
+	
 	@RequestMapping(value = { "/canceOrderItem" }, method = RequestMethod.POST)
 	public @ResponseBody ErrorMessage canceOrderItem(@RequestParam("orderDetailId") List<Integer> orderDetailId,
 			@RequestParam("status") int status, @RequestParam("remark") String remark) {
